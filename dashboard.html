@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>PrepGenius Dashboard</h1>
+
+<input id="exam" placeholder="Exam" />
+<input id="hours" placeholder="Hours per day" />
+<input id="weak" placeholder="Weak subjects (comma)" />
+
+<button onclick="generatePlan()">Generate Plan</button>
+
+<pre id="output"></pre>
+
+<script>
+async function generatePlan() {
+  const exam = document.getElementById("exam").value;
+  const hours = document.getElementById("hours").value;
+  const weak = document.getElementById("weak").value.split(",");
+
+  const res = await fetch("http://localhost:5000/api/plan", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ exam, hours, weak })
+  });
+
+  const data = await res.json();
+
+  document.getElementById("output").innerText =
+    "PLAN:\n" + data.plan + "\n\nRISK: " + data.risk;
+}
+</script>
+
+</body>
+</html>
